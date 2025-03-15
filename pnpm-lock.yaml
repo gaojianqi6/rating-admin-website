@@ -4,6 +4,8 @@ specifiers:
   '@eslint/js': ^9.21.0
   '@radix-ui/react-slot': ^1.1.2
   '@tailwindcss/vite': ^4.0.14
+  '@tanstack/eslint-plugin-query': ^5.68.0
+  '@tanstack/react-query': ^5.68.0
   '@tanstack/react-router': ^1.114.17
   '@tanstack/react-router-devtools': ^1.114.21
   '@tanstack/router-plugin': ^1.114.17
@@ -31,6 +33,7 @@ specifiers:
 dependencies:
   '@radix-ui/react-slot': registry.npmjs.org/@radix-ui/react-slot/1.1.2_cmnynwxg3ky26emhk6apxalvqe
   '@tailwindcss/vite': registry.npmjs.org/@tailwindcss/vite/4.0.14_vite@6.2.2
+  '@tanstack/react-query': registry.npmjs.org/@tanstack/react-query/5.68.0_react@19.0.0
   '@tanstack/react-router': registry.npmjs.org/@tanstack/react-router/1.114.17_upmzqgzhjrquwzo2dphtigtdgi
   class-variance-authority: registry.npmjs.org/class-variance-authority/0.7.1
   clsx: registry.npmjs.org/clsx/2.1.1
@@ -43,6 +46,7 @@ dependencies:
 
 devDependencies:
   '@eslint/js': registry.npmjs.org/@eslint/js/9.22.0
+  '@tanstack/eslint-plugin-query': registry.npmjs.org/@tanstack/eslint-plugin-query/5.68.0_ez5pru2i6jn6d7kfbb5b5jzwla
   '@tanstack/react-router-devtools': registry.npmjs.org/@tanstack/react-router-devtools/1.114.21_nixnexccwffzkt5enft4ssvooi
   '@tanstack/router-plugin': registry.npmjs.org/@tanstack/router-plugin/1.114.17_u73lltt6534epapjl7nuaeiom4
   '@types/node': registry.npmjs.org/@types/node/22.13.10
@@ -1247,11 +1251,44 @@ packages:
       vite: registry.npmjs.org/vite/6.2.2_@types+node@22.13.10
     dev: false
 
+  registry.npmjs.org/@tanstack/eslint-plugin-query/5.68.0_ez5pru2i6jn6d7kfbb5b5jzwla:
+    resolution: {integrity: sha512-w/+y5LILV1GTWBB2R/lKfUzgocKXU1B7O6jipLUJhmxCKPmJFy5zpfR1Vx7c6yCEsQoKcTbhuR/tIy+1sIGaiA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@tanstack/eslint-plugin-query/-/eslint-plugin-query-5.68.0.tgz}
+    id: registry.npmjs.org/@tanstack/eslint-plugin-query/5.68.0
+    name: '@tanstack/eslint-plugin-query'
+    version: 5.68.0
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+    dependencies:
+      '@typescript-eslint/utils': registry.npmjs.org/@typescript-eslint/utils/8.26.1_ez5pru2i6jn6d7kfbb5b5jzwla
+      eslint: registry.npmjs.org/eslint/9.22.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+    dev: true
+
   registry.npmjs.org/@tanstack/history/1.114.12:
     resolution: {integrity: sha512-br0AiFLCdTqqgPoZ6V35k1VoDmli1gGVM/YI1YbLZSA1kUnqFlY+Fx5NOgbRfxa7+oYyHUXkmkp3lJ5LueTrhQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@tanstack/history/-/history-1.114.12.tgz}
     name: '@tanstack/history'
     version: 1.114.12
     engines: {node: '>=12'}
+
+  registry.npmjs.org/@tanstack/query-core/5.68.0:
+    resolution: {integrity: sha512-r8rFYYo8/sY/LNaOqX84h12w7EQev4abFXDWy4UoDVUJzJ5d9Fbmb8ayTi7ScG+V0ap44SF3vNs/45mkzDGyGw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@tanstack/query-core/-/query-core-5.68.0.tgz}
+    name: '@tanstack/query-core'
+    version: 5.68.0
+    dev: false
+
+  registry.npmjs.org/@tanstack/react-query/5.68.0_react@19.0.0:
+    resolution: {integrity: sha512-mMOdGDKlwTP/WV72QqSNf4PAMeoBp/DqBHQ222wBfb51Looi8QUqnCnb9O98ZgvNISmy6fzxRGBJdZ+9IBvX2Q==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@tanstack/react-query/-/react-query-5.68.0.tgz}
+    id: registry.npmjs.org/@tanstack/react-query/5.68.0
+    name: '@tanstack/react-query'
+    version: 5.68.0
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-core': registry.npmjs.org/@tanstack/query-core/5.68.0
+      react: registry.npmjs.org/react/19.0.0
+    dev: false
 
   registry.npmjs.org/@tanstack/react-router-devtools/1.114.21_nixnexccwffzkt5enft4ssvooi:
     resolution: {integrity: sha512-umwT6OnrrRaB6W42X0gt6iemd0bJDFpi9vFysvdyQhm4FOpDOAUsYgt0oz7JexrHGLu8M1mx+vN6UgmVWJdpww==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@tanstack/react-router-devtools/-/react-router-devtools-1.114.21.tgz}
