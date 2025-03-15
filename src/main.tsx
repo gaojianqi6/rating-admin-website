@@ -1,5 +1,7 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+import { Toaster } from "@/components/ui/sonner"
+
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import {
   QueryClient,
@@ -40,6 +42,7 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Toaster />
       </QueryClientProvider>
     </StrictMode>,
   )

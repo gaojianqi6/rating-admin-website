@@ -20,9 +20,12 @@ specifiers:
   eslint-plugin-react-hooks: ^5.1.0
   eslint-plugin-react-refresh: ^0.4.19
   globals: ^15.15.0
+  ky: ^1.7.5
   lucide-react: ^0.482.0
+  next-themes: ^0.4.6
   react: ^19.0.0
   react-dom: ^19.0.0
+  sonner: ^2.0.1
   tailwind-merge: ^3.0.2
   tailwindcss: ^4.0.14
   tailwindcss-animate: ^1.0.7
@@ -39,9 +42,12 @@ dependencies:
   '@tanstack/react-router': registry.npmjs.org/@tanstack/react-router/1.114.17_upmzqgzhjrquwzo2dphtigtdgi
   class-variance-authority: registry.npmjs.org/class-variance-authority/0.7.1
   clsx: registry.npmjs.org/clsx/2.1.1
+  ky: registry.npmjs.org/ky/1.7.5
   lucide-react: registry.npmjs.org/lucide-react/0.482.0_react@19.0.0
+  next-themes: registry.npmjs.org/next-themes/0.4.6_upmzqgzhjrquwzo2dphtigtdgi
   react: registry.npmjs.org/react/19.0.0
   react-dom: registry.npmjs.org/react-dom/19.0.0_react@19.0.0
+  sonner: registry.npmjs.org/sonner/2.0.1_upmzqgzhjrquwzo2dphtigtdgi
   tailwind-merge: registry.npmjs.org/tailwind-merge/3.0.2
   tailwindcss: registry.npmjs.org/tailwindcss/4.0.14
   tailwindcss-animate: registry.npmjs.org/tailwindcss-animate/1.0.7_tailwindcss@4.0.14
@@ -2496,6 +2502,13 @@ packages:
       json-buffer: registry.npmjs.org/json-buffer/3.0.1
     dev: true
 
+  registry.npmjs.org/ky/1.7.5:
+    resolution: {integrity: sha512-HzhziW6sc5m0pwi5M196+7cEBtbt0lCYi67wNsiwMUmz833wloE0gbzJPWKs1gliFKQb34huItDQX97LyOdPdA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/ky/-/ky-1.7.5.tgz}
+    name: ky
+    version: 1.7.5
+    engines: {node: '>=18'}
+    dev: false
+
   registry.npmjs.org/levn/0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/levn/-/levn-0.4.1.tgz}
     name: levn
@@ -2722,6 +2735,19 @@ packages:
     name: natural-compare
     version: 1.4.0
     dev: true
+
+  registry.npmjs.org/next-themes/0.4.6_upmzqgzhjrquwzo2dphtigtdgi:
+    resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/next-themes/-/next-themes-0.4.6.tgz}
+    id: registry.npmjs.org/next-themes/0.4.6
+    name: next-themes
+    version: 0.4.6
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+    dependencies:
+      react: registry.npmjs.org/react/19.0.0
+      react-dom: registry.npmjs.org/react-dom/19.0.0_react@19.0.0
+    dev: false
 
   registry.npmjs.org/node-releases/2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/node-releases/-/node-releases-2.0.19.tgz}
@@ -2989,6 +3015,19 @@ packages:
       seroval: registry.npmjs.org/seroval/1.2.1
       seroval-plugins: registry.npmjs.org/seroval-plugins/1.2.1_seroval@1.2.1
     dev: true
+
+  registry.npmjs.org/sonner/2.0.1_upmzqgzhjrquwzo2dphtigtdgi:
+    resolution: {integrity: sha512-FRBphaehZ5tLdLcQ8g2WOIRE+Y7BCfWi5Zyd8bCvBjiW8TxxAyoWZIxS661Yz6TGPqFQ4VLzOF89WEYhfynSFQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/sonner/-/sonner-2.0.1.tgz}
+    id: registry.npmjs.org/sonner/2.0.1
+    name: sonner
+    version: 2.0.1
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    dependencies:
+      react: registry.npmjs.org/react/19.0.0
+      react-dom: registry.npmjs.org/react-dom/19.0.0_react@19.0.0
+    dev: false
 
   registry.npmjs.org/source-map-js/1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz}
