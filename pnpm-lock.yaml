@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@eslint/js': ^9.21.0
+  '@radix-ui/react-label': ^2.1.2
   '@radix-ui/react-slot': ^1.1.2
   '@tailwindcss/vite': ^4.0.14
   '@tanstack/eslint-plugin-query': ^5.68.0
@@ -31,6 +32,7 @@ specifiers:
   web-vitals: ^4.2.4
 
 dependencies:
+  '@radix-ui/react-label': registry.npmjs.org/@radix-ui/react-label/2.1.2_wtkdjilqpx2hz2pfeskryw43ra
   '@radix-ui/react-slot': registry.npmjs.org/@radix-ui/react-slot/1.1.2_cmnynwxg3ky26emhk6apxalvqe
   '@tailwindcss/vite': registry.npmjs.org/@tailwindcss/vite/4.0.14_vite@6.2.2
   '@tanstack/react-query': registry.npmjs.org/@tanstack/react-query/5.68.0_react@19.0.0
@@ -745,6 +747,52 @@ packages:
     dependencies:
       '@types/react': registry.npmjs.org/@types/react/19.0.10
       react: registry.npmjs.org/react/19.0.0
+    dev: false
+
+  registry.npmjs.org/@radix-ui/react-label/2.1.2_wtkdjilqpx2hz2pfeskryw43ra:
+    resolution: {integrity: sha512-zo1uGMTaNlHehDyFQcDZXRJhUPDuukcnHz0/jnrup0JA6qL+AFpAnty+7VKa9esuU5xTblAZzTGYJKSKaBxBhw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@radix-ui/react-label/-/react-label-2.1.2.tgz}
+    id: registry.npmjs.org/@radix-ui/react-label/2.1.2
+    name: '@radix-ui/react-label'
+    version: 2.1.2
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@radix-ui/react-primitive': registry.npmjs.org/@radix-ui/react-primitive/2.0.2_wtkdjilqpx2hz2pfeskryw43ra
+      '@types/react': registry.npmjs.org/@types/react/19.0.10
+      '@types/react-dom': registry.npmjs.org/@types/react-dom/19.0.4_@types+react@19.0.10
+      react: registry.npmjs.org/react/19.0.0
+      react-dom: registry.npmjs.org/react-dom/19.0.0_react@19.0.0
+    dev: false
+
+  registry.npmjs.org/@radix-ui/react-primitive/2.0.2_wtkdjilqpx2hz2pfeskryw43ra:
+    resolution: {integrity: sha512-Ec/0d38EIuvDF+GZjcMU/Ze6MxntVJYO/fRlCPhCaVUyPY9WTalHJw54tp9sXeJo3tlShWpy41vQRgLRGOuz+w==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.0.2.tgz}
+    id: registry.npmjs.org/@radix-ui/react-primitive/2.0.2
+    name: '@radix-ui/react-primitive'
+    version: 2.0.2
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@radix-ui/react-slot': registry.npmjs.org/@radix-ui/react-slot/1.1.2_cmnynwxg3ky26emhk6apxalvqe
+      '@types/react': registry.npmjs.org/@types/react/19.0.10
+      '@types/react-dom': registry.npmjs.org/@types/react-dom/19.0.4_@types+react@19.0.10
+      react: registry.npmjs.org/react/19.0.0
+      react-dom: registry.npmjs.org/react-dom/19.0.0_react@19.0.0
     dev: false
 
   registry.npmjs.org/@radix-ui/react-slot/1.1.2_cmnynwxg3ky26emhk6apxalvqe:
@@ -1528,7 +1576,6 @@ packages:
       '@types/react': ^19.0.0
     dependencies:
       '@types/react': registry.npmjs.org/@types/react/19.0.10
-    dev: true
 
   registry.npmjs.org/@types/react/19.0.10:
     resolution: {integrity: sha512-JuRQ9KXLEjaUNjTWpzuR231Z2WpIwczOkBEIvbHNCzQefFIT0L8IqE6NV6ULLyC1SI/i234JnDoMkfg+RjQj2g==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@types/react/-/react-19.0.10.tgz}
