@@ -36,6 +36,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getUsers } from '@/api/user'
 import { User } from '@/typings/user'
+import { datetime } from '@/utils/date'
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -76,12 +77,12 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "createdTime",
     header: "Created Time",
-    cell: ({ row }) => row.getValue("createdTime"),
+    cell: ({ row }) => datetime(row.getValue("createdTime")),
   },
   {
     accessorKey: "updatedTime",
     header: "Updated Time",
-    cell: ({ row }) => row.getValue("updatedTime"),
+    cell: ({ row }) => datetime(row.getValue("updatedTime")),
   },
   {
     id: "actions",
