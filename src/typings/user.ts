@@ -1,13 +1,17 @@
 import { ListRequest } from "@/typings/common";
 
 export interface User {
-  role_id: number
-  password: string
-  updated_time: string
   id: number
   username: string
-  created_time: string
-  updated_by: number
+  email: string
+  roleId: number
+  roleName: string
+  password: string
+  updatedTime: string
+  createdTime: string
+  updatedBy: number
+  updatedByName: string
+  avatar: string
 }
 
 export interface Role {

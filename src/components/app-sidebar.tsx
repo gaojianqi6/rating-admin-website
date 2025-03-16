@@ -1,30 +1,27 @@
-import * as React from "react"
+import * as React from "react";
 import {
   GalleryVerticalEnd,
   ListMinus,
   LayoutTemplate,
   UsersRound,
   UserCog,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import { useUserStore } from "@/store/user";
+import { User } from "@/typings/user";
 
 // This is sample data.
 const data = {
-  user: {
-    name: "jerome",
-    email: "jerome@gmail.com",
-    avatar: "/avatar.jpeg",
-  },
   teams: [
     {
       name: "Rating Everything",
@@ -64,7 +61,7 @@ const data = {
       items: [
         {
           title: "Users",
-          url: "/users",
+          url: "/user/list",
         },
       ],
     },
@@ -87,9 +84,12 @@ const data = {
     //   icon: Frame,
     // },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUserStore();
+  const navUserData = { ...user, avatar: "/avatar.jpeg" } as User;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -100,9 +100,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={navUserData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

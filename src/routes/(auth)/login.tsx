@@ -21,8 +21,8 @@ function RouteComponent() {
       onSuccess: (result) => {
         console.log(result);
 
-        const { access_token } = result;
-        localStorage.setItem("accessToken", access_token);
+        const { accessToken } = result;
+        localStorage.setItem("accessToken", accessToken);
 
         toast("Login Successful");
         navigate({ to: "/" });
