@@ -14,12 +14,28 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import React, { useEffect } from "react";
+import { useAtom } from "jotai";
+import { currentItemAtom, urlAtom } from "@/store/menu";
 
 export const Route = createFileRoute("/(app)")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const [, setUrl] = useAtom(urlAtom);
+  const [currentItem] = useAtom(currentItemAtom);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      console.log("hash:", window.location.pathname);
+      setUrl(window.location.pathname);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [setUrl]);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -30,15 +46,24 @@ function RouteComponent() {
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {currentItem.title.map((title: string, index: number) => {
+                  if (index === 0) {
+                    return (
+                      <BreadcrumbItem key={`breadcrumb-item-${index}`} className="hidden md:block">
+                        <BreadcrumbLink key="link1" href="#">{title}</BreadcrumbLink>
+                      </BreadcrumbItem>
+                    );
+                  } else {
+                    return (
+                      <React.Fragment key={`breadcrumb-fragment-${index}`}>
+                        <BreadcrumbSeparator className="hidden md:block" />
+                        <BreadcrumbItem key={`breadcrumb-item-${index}`}>
+                          <BreadcrumbPage key="page2">{title}</BreadcrumbPage>
+                        </BreadcrumbItem>
+                      </React.Fragment>
+                    );
+                  }
+                })}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

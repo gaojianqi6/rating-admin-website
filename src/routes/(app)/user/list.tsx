@@ -14,7 +14,6 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -34,76 +33,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getUsers } from '@/api/user'
+import { User } from '@/typings/user'
 
-const data: Payment[] = [
+export const columns: ColumnDef<User>[] = [
   {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@example.com",
+    accessorKey: "id",
+    header: "Id",
+    cell: ({ row }) => row.getValue("id"),
   },
   {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@example.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@example.com",
-  },
-]
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    accessorKey: "username",
+    header: "Username",
+    cell: ({ row }) => row.getValue("username"),
   },
   {
     accessorKey: "email",
@@ -121,26 +64,30 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    },
+    accessorKey: "roleName",
+    header: "Role",
+    cell: ({ row }) => row.getValue("roleName"),
+  },
+  {
+    accessorKey: "updatedByName",
+    header: "Updated By",
+    cell: ({ row }) => row.getValue("updatedByName"),
+  },
+  {
+    accessorKey: "createdTime",
+    header: "Created Time",
+    cell: ({ row }) => row.getValue("createdTime"),
+  },
+  {
+    accessorKey: "updatedTime",
+    header: "Updated Time",
+    cell: ({ row }) => row.getValue("updatedTime"),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-
+      const id = row.getValue("id");
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -151,14 +98,14 @@ export const columns: ColumnDef<Payment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>Update user</DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(String(id))}
             >
-              Copy payment ID
+              Delete user
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View user details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -167,6 +114,8 @@ export const columns: ColumnDef<Payment>[] = [
 ]
 
 export function RoleListTable() {
+  const { data = { list: [], total: 0, pageNo: 1, pageSize: 10 } } = useQuery({queryKey: ['users/'], queryFn: getUsers})
+  const { list, total, pageNo, pageSize } = data;
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
@@ -176,7 +125,7 @@ export function RoleListTable() {
   const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
-    data,
+    data: list,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -195,8 +144,16 @@ export function RoleListTable() {
   })
 
   return (
-    <div className="w-full">
+    <div className="w-full px-4">
       <div className="flex items-center py-4">
+      <Input
+          placeholder="Filter username..."
+          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("username")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm mr-4"
+        />
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -257,7 +214,6 @@ export function RoleListTable() {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -284,8 +240,7 @@ export function RoleListTable() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          Total {total} Items
         </div>
         <div className="space-x-2">
           <Button

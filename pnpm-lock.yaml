@@ -28,6 +28,7 @@ specifiers:
   eslint-plugin-react-hooks: ^5.1.0
   eslint-plugin-react-refresh: ^0.4.19
   globals: ^15.15.0
+  jotai: ^2.12.2
   ky: ^1.7.5
   lucide-react: ^0.482.0
   next-themes: ^0.4.6
@@ -59,6 +60,7 @@ dependencies:
   '@tanstack/react-table': registry.npmjs.org/@tanstack/react-table/8.21.2_upmzqgzhjrquwzo2dphtigtdgi
   class-variance-authority: registry.npmjs.org/class-variance-authority/0.7.1
   clsx: registry.npmjs.org/clsx/2.1.1
+  jotai: registry.npmjs.org/jotai/2.12.2_cmnynwxg3ky26emhk6apxalvqe
   ky: registry.npmjs.org/ky/1.7.5
   lucide-react: registry.npmjs.org/lucide-react/0.482.0_react@19.0.0
   next-themes: registry.npmjs.org/next-themes/0.4.6_upmzqgzhjrquwzo2dphtigtdgi
@@ -3219,6 +3221,25 @@ packages:
     name: jiti
     version: 2.4.2
     hasBin: true
+    dev: false
+
+  registry.npmjs.org/jotai/2.12.2_cmnynwxg3ky26emhk6apxalvqe:
+    resolution: {integrity: sha512-oN8715y7MkjXlSrpyjlR887TOuc/NLZMs9gvgtfWH/JP47ChwO0lR2ijSwBvPMYyXRAPT+liIAhuBavluKGgtA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/jotai/-/jotai-2.12.2.tgz}
+    id: registry.npmjs.org/jotai/2.12.2
+    name: jotai
+    version: 2.12.2
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': registry.npmjs.org/@types/react/19.0.10
+      react: registry.npmjs.org/react/19.0.0
     dev: false
 
   registry.npmjs.org/js-tokens/4.0.0:
