@@ -16,19 +16,19 @@ function RouteComponent() {
     mutationFn: login,
   });
 
-  const onSubmit = (data: { username: string; password: string }) => {
-    toast("Success");
+  const handleLoginSubmit = (data: { username: string; password: string }) => {
     loginMutation.mutate(data, {
       onSuccess: (result) => {
         console.log(result);
 
-        const { access_token, token_type } = result;
+        const { access_token } = result;
         localStorage.setItem("accessToken", access_token);
 
+        toast("Login Successful");
         navigate({ to: "/" });
       },
-      onError: (error: any) => {
-        // Set a global error message if the API returns an error.
+      onError: (error: Error) => {
+        setLoginError(error.message);
         console.log(error.message || "An unexpected error occurred.");
       },
     });
@@ -37,7 +37,7 @@ function RouteComponent() {
   return (
     <div className="flex justify-center mt-36">
       <div className="min-w-96">
-        <LoginForm loginError={loginError} onSubmit={onSubmit} />
+        <LoginForm loginError={loginError} submitFn={handleLoginSubmit} />
       </div>
     </div>
   );

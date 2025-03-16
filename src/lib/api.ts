@@ -1,3 +1,4 @@
+import { toLogin } from '@/utils/auth';
 import ky from 'ky';
 
 console.log("import.meta.env.", import.meta.env, import.meta.env.VITE_API_BASE_URL)
@@ -30,22 +31,18 @@ const api = ky.create({
       async (request, options, response) => {
         // Handle unauthorized responses
         if (response.status === 401) {
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem('accessToken');
-            window.location.href = '/login';
-          }
+          toLogin();
         }
       }
     ]
   }
 });
 
-export const postForm = (url: string, obj: object) => {
+export const postForm = <T>(url: string, obj: object): Promise<T> => {
   const body = new URLSearchParams();
-  Object.keys(obj).forEach((key) => {
-    body.append(key, obj[key]);
-  })
-  console.log("post form:", url, body, obj)
+  Object.entries(obj).forEach(([key, value]) => {
+    body.append(key, value);
+  });
   return api.post(url, { body }).json();
 }
 

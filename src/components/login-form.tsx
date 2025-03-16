@@ -11,12 +11,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
+type LoginFormProps = {
+  submitFn: (data: { username: string; password: string }) => void;
+  loginError?: string;
+} & React.ComponentProps<"div">;
+
 export function LoginForm({
   className,
-  onSubmit,
+  submitFn,
   loginError,
   ...props
-}: React.ComponentProps<"div">) {
+}: LoginFormProps) {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
@@ -38,7 +43,7 @@ export function LoginForm({
       return;
     }
 
-    onSubmit({ username, password });
+    submitFn({ username, password });
   };
 
   return (
