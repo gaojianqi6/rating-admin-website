@@ -21,18 +21,3 @@ export const useUserStore = create<UserStore, [["zustand/persist", UserStore]]>(
     }
   )
 );
-
-// export const useUserStore = create<UserStore>(
-//   persist(
-//     (set) => ({
-//       user: null,
-//       setUser: (user: User) => set({ user }),
-//       clearUser: () => set({ user: null }),
-//     }),
-//     {
-//       name: 'user-storage', // key in localStorage
-//       // Optionally, specify getStorage if needed (default is localStorage)
-//       getStorage: () => localStorage,
-//     }
-//   )
-// );

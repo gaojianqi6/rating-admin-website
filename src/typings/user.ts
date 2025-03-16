@@ -21,6 +21,10 @@ export interface Role {
 
 export interface UserListRequest extends ListRequest {
   username: string
+  email: string
+  roleId: number
+  createdTimeStart: string
+  createdTimeEnd: string
 }
 
 export interface UserList {
