@@ -1,8 +1,7 @@
-// src/pages/template/EditorPage.tsx - Ultra-minimal static version
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Trash2, Plus, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,13 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getTemplate } from "@/api/template";
-import { Template } from "@/typings/template";
 import { INITIAL_TEMPLATE_DATA } from "@/store/template";
 
 // Field type options - static data
@@ -66,7 +63,7 @@ export function TemplateViewPage() {
   const navigate = useNavigate();
   const { id } = useParams({ strict: false })
   const { data: templateData } = useQuery({
-    queryFn: () => getTemplate(id),
+    queryFn: () => getTemplate(id || ""),
     queryKey: ["query/template"],
     initialData: INITIAL_TEMPLATE_DATA,
   });

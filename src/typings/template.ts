@@ -25,7 +25,7 @@ export interface TemplateField {
   isSearchable: boolean;
   isFilterable: boolean;
   displayOrder: number;
-  dataSourceId?: number;
+  dataSourceId?: number | null;
   validationRules?: any;
 }
 
