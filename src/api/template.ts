@@ -72,8 +72,10 @@ export const createTemplate = (template: any): Promise<Template> =>
 /**
  * Update an existing template
  */
-export const updateTemplate = (id: string, template: any): Promise<Template> => 
-  api.put(`v1/templates/${id}`, { json: template }).json();
+export const updateTemplate = (id: string, template: any): Promise<Template> => {
+  console.log("update template:", id, template);
+  return api.put(`v1/templates/${id}`, { json: template }).json();
+}
 
 /**
  * Delete a template

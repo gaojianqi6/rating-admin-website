@@ -6,7 +6,8 @@ console.log("import.meta.env.", import.meta.env, import.meta.env.VITE_API_BASE_U
 const api = ky.create({
   prefixUrl: import.meta.env.VITE_API_BASE_URL,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    // 'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': "application/json",
   },
   // Override the default JSON parser to check the `code` field.
   parseJson: (text: string) => {
@@ -43,7 +44,7 @@ export const postForm = <T>(url: string, obj: object): Promise<T> => {
   Object.entries(obj).forEach(([key, value]) => {
     body.append(key, value);
   });
-  return api.post(url, { body }).json();
+  return api.post(url, { body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).json();
 }
 
 export default api;
