@@ -49,7 +49,7 @@ export const APP_DATA = {
       items: [
         {
           title: "Rating Templates",
-          url: "#",
+          url: "/template/list",
         },
       ],
     },
@@ -79,6 +79,66 @@ export const APP_DATA = {
   projects: [],
 }
 
+export const TOTAL_NAVS = APP_DATA.navMain.concat([{
+  title: "Template Management",
+  url: "#",
+  icon: LayoutTemplate,
+  isActive: true,
+  items: [
+    {
+      title: "Create Rating Template",
+      url: "/template/create",
+    },
+  ],
+}, {
+  title: "Template Management",
+  url: "#",
+  icon: LayoutTemplate,
+  isActive: true,
+  items: [
+    {
+      title: "View Rating Template",
+      url: "/template/$id/view",
+      pattern: /^\/template\/\d+\/view$/
+    },
+  ],
+}, {
+  title: "Template Management",
+  url: "#",
+  icon: LayoutTemplate,
+  isActive: true,
+  items: [
+    {
+      title: "Edit Rating Template",
+      url: "/template/$id/edit",
+    },
+  ],
+},]);
+
+// Function to check if a URL matches a pattern
+function matchUrlPattern(navItem, currentUrl) {
+  // Direct match
+  if (navItem.url === currentUrl) {
+    return true;
+  }
+  
+  // Pattern match (for routes with parameters)
+  if (navItem.pattern && navItem.pattern.test(currentUrl)) {
+    return true;
+  }
+
+  // Check if this is a parameter route by looking for "$" in the URL
+  if (navItem.url && navItem.url.includes('$')) {
+    // Convert the route template to a regex pattern
+    const regexPattern = navItem.url.replace(/\$\w+/g, '\\d+');
+    const dynamicPattern = new RegExp(`^${regexPattern}$`);
+    return dynamicPattern.test(currentUrl);
+  }
+  
+  return false;
+}
+
+
 export const urlAtom = atom(window.location.pathname || "/")
 // Derived atom that calculates the current item based on the current URL
 export const currentItemAtom = atom((get) => {
@@ -88,10 +148,10 @@ export const currentItemAtom = atom((get) => {
   const result: { url: string; title: string[] } = { url: currentUrl, title: [] };
 
   // Look through navMain items first.
-  for (const nav of APP_DATA.navMain) {
+  for (const nav of TOTAL_NAVS) {
     // If there are subitems, attempt to find a matching child.
     if (nav.items && nav.items.length) {
-      const found = nav.items.find((item) => item.url === currentUrl);
+      const found = nav.items.find((item) => matchUrlPattern(item, currentUrl));
       if (found) {
         result.title = [nav.title, found.title];
         return result;
@@ -115,4 +175,5 @@ export const currentItemAtom = atom((get) => {
   result.title = ["Unknown Title", "Unknown Subtitle"];
   return result;
 });
+
 export const teamAtom = atom<Team>(APP_DATA.teams[0])

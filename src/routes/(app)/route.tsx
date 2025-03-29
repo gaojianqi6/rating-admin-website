@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -26,15 +26,11 @@ function RouteComponent() {
   const [, setUrl] = useAtom(urlAtom);
   const [currentItem] = useAtom(currentItemAtom);
 
-  useEffect(() => {
-    const handleHashChange = () => {
-      console.log("hash:", window.location.pathname);
-      setUrl(window.location.pathname);
-    };
+  const location = useLocation()
 
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, [setUrl]);
+  useEffect(() => {
+    setUrl && setUrl(location.pathname);
+  }, [setUrl, location]);
 
   return (
     <SidebarProvider>

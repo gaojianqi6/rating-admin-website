@@ -16,7 +16,11 @@ import { Route as appIndexImport } from './routes/(app)/index'
 import { Route as authLoginImport } from './routes/(auth)/login'
 import { Route as appAboutImport } from './routes/(app)/about'
 import { Route as appUserListImport } from './routes/(app)/user/list'
+import { Route as appTemplateListImport } from './routes/(app)/template/list'
+import { Route as appTemplateCreateImport } from './routes/(app)/template/create'
 import { Route as appRoleListImport } from './routes/(app)/role/list'
+import { Route as appTemplateIdViewImport } from './routes/(app)/template/$id/view'
+import { Route as appTemplateIdEditImport } from './routes/(app)/template/$id/edit'
 
 // Create/Update Routes
 
@@ -49,9 +53,33 @@ const appUserListRoute = appUserListImport.update({
   getParentRoute: () => appRouteRoute,
 } as any)
 
+const appTemplateListRoute = appTemplateListImport.update({
+  id: '/template/list',
+  path: '/template/list',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appTemplateCreateRoute = appTemplateCreateImport.update({
+  id: '/template/create',
+  path: '/template/create',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
 const appRoleListRoute = appRoleListImport.update({
   id: '/role/list',
   path: '/role/list',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appTemplateIdViewRoute = appTemplateIdViewImport.update({
+  id: '/template/$id/view',
+  path: '/template/$id/view',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appTemplateIdEditRoute = appTemplateIdEditImport.update({
+  id: '/template/$id/edit',
+  path: '/template/$id/edit',
   getParentRoute: () => appRouteRoute,
 } as any)
 
@@ -94,11 +122,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appRoleListImport
       parentRoute: typeof appRouteImport
     }
+    '/(app)/template/create': {
+      id: '/(app)/template/create'
+      path: '/template/create'
+      fullPath: '/template/create'
+      preLoaderRoute: typeof appTemplateCreateImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/template/list': {
+      id: '/(app)/template/list'
+      path: '/template/list'
+      fullPath: '/template/list'
+      preLoaderRoute: typeof appTemplateListImport
+      parentRoute: typeof appRouteImport
+    }
     '/(app)/user/list': {
       id: '/(app)/user/list'
       path: '/user/list'
       fullPath: '/user/list'
       preLoaderRoute: typeof appUserListImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/template/$id/edit': {
+      id: '/(app)/template/$id/edit'
+      path: '/template/$id/edit'
+      fullPath: '/template/$id/edit'
+      preLoaderRoute: typeof appTemplateIdEditImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/template/$id/view': {
+      id: '/(app)/template/$id/view'
+      path: '/template/$id/view'
+      fullPath: '/template/$id/view'
+      preLoaderRoute: typeof appTemplateIdViewImport
       parentRoute: typeof appRouteImport
     }
   }
@@ -110,14 +166,22 @@ interface appRouteRouteChildren {
   appAboutRoute: typeof appAboutRoute
   appIndexRoute: typeof appIndexRoute
   appRoleListRoute: typeof appRoleListRoute
+  appTemplateCreateRoute: typeof appTemplateCreateRoute
+  appTemplateListRoute: typeof appTemplateListRoute
   appUserListRoute: typeof appUserListRoute
+  appTemplateIdEditRoute: typeof appTemplateIdEditRoute
+  appTemplateIdViewRoute: typeof appTemplateIdViewRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appAboutRoute: appAboutRoute,
   appIndexRoute: appIndexRoute,
   appRoleListRoute: appRoleListRoute,
+  appTemplateCreateRoute: appTemplateCreateRoute,
+  appTemplateListRoute: appTemplateListRoute,
   appUserListRoute: appUserListRoute,
+  appTemplateIdEditRoute: appTemplateIdEditRoute,
+  appTemplateIdViewRoute: appTemplateIdViewRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
@@ -129,7 +193,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof appAboutRoute
   '/login': typeof authLoginRoute
   '/role/list': typeof appRoleListRoute
+  '/template/create': typeof appTemplateCreateRoute
+  '/template/list': typeof appTemplateListRoute
   '/user/list': typeof appUserListRoute
+  '/template/$id/edit': typeof appTemplateIdEditRoute
+  '/template/$id/view': typeof appTemplateIdViewRoute
 }
 
 export interface FileRoutesByTo {
@@ -137,7 +205,11 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/': typeof appIndexRoute
   '/role/list': typeof appRoleListRoute
+  '/template/create': typeof appTemplateCreateRoute
+  '/template/list': typeof appTemplateListRoute
   '/user/list': typeof appUserListRoute
+  '/template/$id/edit': typeof appTemplateIdEditRoute
+  '/template/$id/view': typeof appTemplateIdViewRoute
 }
 
 export interface FileRoutesById {
@@ -147,14 +219,36 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/(app)/': typeof appIndexRoute
   '/(app)/role/list': typeof appRoleListRoute
+  '/(app)/template/create': typeof appTemplateCreateRoute
+  '/(app)/template/list': typeof appTemplateListRoute
   '/(app)/user/list': typeof appUserListRoute
+  '/(app)/template/$id/edit': typeof appTemplateIdEditRoute
+  '/(app)/template/$id/view': typeof appTemplateIdViewRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/login' | '/role/list' | '/user/list'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/login'
+    | '/role/list'
+    | '/template/create'
+    | '/template/list'
+    | '/user/list'
+    | '/template/$id/edit'
+    | '/template/$id/view'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/login' | '/' | '/role/list' | '/user/list'
+  to:
+    | '/about'
+    | '/login'
+    | '/'
+    | '/role/list'
+    | '/template/create'
+    | '/template/list'
+    | '/user/list'
+    | '/template/$id/edit'
+    | '/template/$id/view'
   id:
     | '__root__'
     | '/(app)'
@@ -162,7 +256,11 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(app)/'
     | '/(app)/role/list'
+    | '/(app)/template/create'
+    | '/(app)/template/list'
     | '/(app)/user/list'
+    | '/(app)/template/$id/edit'
+    | '/(app)/template/$id/view'
   fileRoutesById: FileRoutesById
 }
 
@@ -196,7 +294,11 @@ export const routeTree = rootRoute
         "/(app)/about",
         "/(app)/",
         "/(app)/role/list",
-        "/(app)/user/list"
+        "/(app)/template/create",
+        "/(app)/template/list",
+        "/(app)/user/list",
+        "/(app)/template/$id/edit",
+        "/(app)/template/$id/view"
       ]
     },
     "/(app)/about": {
@@ -214,8 +316,24 @@ export const routeTree = rootRoute
       "filePath": "(app)/role/list.tsx",
       "parent": "/(app)"
     },
+    "/(app)/template/create": {
+      "filePath": "(app)/template/create.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/template/list": {
+      "filePath": "(app)/template/list.tsx",
+      "parent": "/(app)"
+    },
     "/(app)/user/list": {
       "filePath": "(app)/user/list.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/template/$id/edit": {
+      "filePath": "(app)/template/$id/edit.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/template/$id/view": {
+      "filePath": "(app)/template/$id/view.tsx",
       "parent": "/(app)"
     }
   }
