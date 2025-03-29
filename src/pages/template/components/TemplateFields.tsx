@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Trash2, Plus } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -19,19 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { templateAtom, editingFieldAtom } from "../index";
 import { FieldDialog } from "./FieldDialog";
 import { DeleteFieldDialog } from "./DeleteFieldDialog";
-
-// Helper function for validation rules
-function getSafeValidationRules(field) {
-  if (!field) return {};
-  const rules = field.validationRules || {};
-  return {
-    minLength: rules.minLength,
-    maxLength: rules.maxLength,
-    min: rules.min,
-    max: rules.max,
-    pattern: rules.pattern,
-  };
-}
+import { getSafeValidationRules } from "@/utils/template";
 
 interface TemplateFieldsProps {
   mode: 'create' | 'edit' | 'view';
@@ -41,7 +29,7 @@ interface TemplateFieldsProps {
 
 export function TemplateFields({ mode, dataSources, onBack }: TemplateFieldsProps) {
   const [template, setTemplate] = useAtom(templateAtom);
-  const [editingField, setEditingField] = useAtom(editingFieldAtom);
+  const [_editingField, setEditingField] = useAtom(editingFieldAtom);
   
   const [isFieldDialogOpen, setIsFieldDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);

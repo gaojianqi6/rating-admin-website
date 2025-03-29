@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 
 import { templateAtom, editingFieldAtom } from "../index";
+import { getSafeValidationRules } from '@/utils/template';
 
 // Field type options
 const fieldTypeOptions = [
@@ -36,19 +37,6 @@ const fieldTypeOptions = [
   { value: "date", label: "Date" },
   { value: "checkbox", label: "Checkbox" },
 ];
-
-// Helper function for validation rules
-function getSafeValidationRules(field) {
-  if (!field) return {};
-  const rules = field.validationRules || {};
-  return {
-    minLength: rules.minLength,
-    maxLength: rules.maxLength,
-    min: rules.min,
-    max: rules.max,
-    pattern: rules.pattern,
-  };
-}
 
 interface FieldDialogProps {
   isOpen: boolean;
