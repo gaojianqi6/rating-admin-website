@@ -30,14 +30,14 @@ export const APP_DATA = {
       icon: Airplay,
     },
     {
-      title: "Rating Infos Management",
+      title: "Items Management",
       url: "#",
       icon: ListMinus,
       isActive: true,
       items: [
         {
-          title: "Rating Infos",
-          url: "#",
+          title: "Rating Items",
+          url: "/items/list",
         },
       ],
     },

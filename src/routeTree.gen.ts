@@ -19,6 +19,8 @@ import { Route as appUserListImport } from './routes/(app)/user/list'
 import { Route as appTemplateListImport } from './routes/(app)/template/list'
 import { Route as appTemplateCreateImport } from './routes/(app)/template/create'
 import { Route as appRoleListImport } from './routes/(app)/role/list'
+import { Route as appItemsListImport } from './routes/(app)/items/list'
+import { Route as appItemsItemIdImport } from './routes/(app)/items/$itemId'
 import { Route as appTemplateIdViewImport } from './routes/(app)/template/$id/view'
 import { Route as appTemplateIdEditImport } from './routes/(app)/template/$id/edit'
 
@@ -71,6 +73,18 @@ const appRoleListRoute = appRoleListImport.update({
   getParentRoute: () => appRouteRoute,
 } as any)
 
+const appItemsListRoute = appItemsListImport.update({
+  id: '/items/list',
+  path: '/items/list',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appItemsItemIdRoute = appItemsItemIdImport.update({
+  id: '/items/$itemId',
+  path: '/items/$itemId',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
 const appTemplateIdViewRoute = appTemplateIdViewImport.update({
   id: '/template/$id/view',
   path: '/template/$id/view',
@@ -113,6 +127,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof appIndexImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/items/$itemId': {
+      id: '/(app)/items/$itemId'
+      path: '/items/$itemId'
+      fullPath: '/items/$itemId'
+      preLoaderRoute: typeof appItemsItemIdImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/items/list': {
+      id: '/(app)/items/list'
+      path: '/items/list'
+      fullPath: '/items/list'
+      preLoaderRoute: typeof appItemsListImport
       parentRoute: typeof appRouteImport
     }
     '/(app)/role/list': {
@@ -165,6 +193,8 @@ declare module '@tanstack/react-router' {
 interface appRouteRouteChildren {
   appAboutRoute: typeof appAboutRoute
   appIndexRoute: typeof appIndexRoute
+  appItemsItemIdRoute: typeof appItemsItemIdRoute
+  appItemsListRoute: typeof appItemsListRoute
   appRoleListRoute: typeof appRoleListRoute
   appTemplateCreateRoute: typeof appTemplateCreateRoute
   appTemplateListRoute: typeof appTemplateListRoute
@@ -176,6 +206,8 @@ interface appRouteRouteChildren {
 const appRouteRouteChildren: appRouteRouteChildren = {
   appAboutRoute: appAboutRoute,
   appIndexRoute: appIndexRoute,
+  appItemsItemIdRoute: appItemsItemIdRoute,
+  appItemsListRoute: appItemsListRoute,
   appRoleListRoute: appRoleListRoute,
   appTemplateCreateRoute: appTemplateCreateRoute,
   appTemplateListRoute: appTemplateListRoute,
@@ -192,6 +224,8 @@ export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
   '/about': typeof appAboutRoute
   '/login': typeof authLoginRoute
+  '/items/$itemId': typeof appItemsItemIdRoute
+  '/items/list': typeof appItemsListRoute
   '/role/list': typeof appRoleListRoute
   '/template/create': typeof appTemplateCreateRoute
   '/template/list': typeof appTemplateListRoute
@@ -204,6 +238,8 @@ export interface FileRoutesByTo {
   '/about': typeof appAboutRoute
   '/login': typeof authLoginRoute
   '/': typeof appIndexRoute
+  '/items/$itemId': typeof appItemsItemIdRoute
+  '/items/list': typeof appItemsListRoute
   '/role/list': typeof appRoleListRoute
   '/template/create': typeof appTemplateCreateRoute
   '/template/list': typeof appTemplateListRoute
@@ -218,6 +254,8 @@ export interface FileRoutesById {
   '/(app)/about': typeof appAboutRoute
   '/(auth)/login': typeof authLoginRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/items/$itemId': typeof appItemsItemIdRoute
+  '/(app)/items/list': typeof appItemsListRoute
   '/(app)/role/list': typeof appRoleListRoute
   '/(app)/template/create': typeof appTemplateCreateRoute
   '/(app)/template/list': typeof appTemplateListRoute
@@ -232,6 +270,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/login'
+    | '/items/$itemId'
+    | '/items/list'
     | '/role/list'
     | '/template/create'
     | '/template/list'
@@ -243,6 +283,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/login'
     | '/'
+    | '/items/$itemId'
+    | '/items/list'
     | '/role/list'
     | '/template/create'
     | '/template/list'
@@ -255,6 +297,8 @@ export interface FileRouteTypes {
     | '/(app)/about'
     | '/(auth)/login'
     | '/(app)/'
+    | '/(app)/items/$itemId'
+    | '/(app)/items/list'
     | '/(app)/role/list'
     | '/(app)/template/create'
     | '/(app)/template/list'
@@ -293,6 +337,8 @@ export const routeTree = rootRoute
       "children": [
         "/(app)/about",
         "/(app)/",
+        "/(app)/items/$itemId",
+        "/(app)/items/list",
         "/(app)/role/list",
         "/(app)/template/create",
         "/(app)/template/list",
@@ -310,6 +356,14 @@ export const routeTree = rootRoute
     },
     "/(app)/": {
       "filePath": "(app)/index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/items/$itemId": {
+      "filePath": "(app)/items/$itemId.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/items/list": {
+      "filePath": "(app)/items/list.tsx",
       "parent": "/(app)"
     },
     "/(app)/role/list": {
