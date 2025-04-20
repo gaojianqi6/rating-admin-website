@@ -84,6 +84,8 @@ export function TemplateFields({ mode, dataSources, onBack }: TemplateFieldsProp
     }
     setIsDeleteDialogOpen(false);
   };
+
+  const fields = (template?.fields || []).sort((a, b) => a.displayOrder > b.displayOrder ? 1 : -1);
   
   return (
     <>
@@ -93,7 +95,7 @@ export function TemplateFields({ mode, dataSources, onBack }: TemplateFieldsProp
             <CardTitle>Template Fields</CardTitle>
             <CardDescription>
               {isReadOnly 
-                ? "View the fields that make up this template."
+                ? "View the fields that make up this `template.`"
                 : "Define the fields that make up this template."}
             </CardDescription>
           </div>
@@ -106,7 +108,7 @@ export function TemplateFields({ mode, dataSources, onBack }: TemplateFieldsProp
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[600px] pr-4">
-            {template.fields.length === 0 ? (
+            {fields.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-40 border border-dashed rounded-md bg-muted/50 p-8">
                 <p className="text-muted-foreground mb-4">No fields added yet</p>
                 {!isReadOnly && (
@@ -118,7 +120,7 @@ export function TemplateFields({ mode, dataSources, onBack }: TemplateFieldsProp
               </div>
             ) : (
               <div className="space-y-6">
-                {template.fields.map((field, index) => (
+                {fields.map((field, index) => (
                   <div
                     key={`field-${field.id || index}`}
                     className="border rounded-lg p-4 bg-card"

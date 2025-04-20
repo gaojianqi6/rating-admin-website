@@ -55,7 +55,7 @@ export function TemplateHeader({ mode, templateData }: TemplateHeaderProps) {
     }
     
     // Clean up validation rules - remove null/undefined values
-    const cleanedFields = template.fields.map(field => {
+    const cleanedFields = template.fields?.map(field => {
       const validationRules = field.validationRules || {};
       const cleanedRules = Object.fromEntries(
         Object.entries(validationRules).filter(([_, value]) => value !== null && value !== undefined)
