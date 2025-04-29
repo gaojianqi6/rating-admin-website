@@ -30,12 +30,14 @@ import { getSafeValidationRules } from '@/utils/template';
 // Field type options
 const fieldTypeOptions = [
   { value: "text", label: "Text" },
+  { value: "img", label: "Image" },
   { value: "textarea", label: "Text Area" },
   { value: "number", label: "Number" },
   { value: "select", label: "Select" },
   { value: "multiselect", label: "Multi Select" },
   { value: "date", label: "Date" },
   { value: "checkbox", label: "Checkbox" },
+  { value: "url", label: "URL" },
 ];
 
 interface FieldDialogProps {
