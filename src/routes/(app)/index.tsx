@@ -117,7 +117,7 @@ function Index() {
       {/* Template Stats */}
       <h2 className="text-2xl font-bold mb-4">Items by Template</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        {statistics && Object.entries(statistics.itemsByTemplate).map(([template, count]) => (
+        {statistics && ['movie', 'tvSeries', 'varietyShow', 'book', 'music', 'podcast'].map((template) => (
           <Card key={template}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium capitalize">
@@ -125,7 +125,7 @@ function Index() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{count}</div>
+              <div className="text-2xl font-bold">{statistics.itemsByTemplate[template] || 0}</div>
             </CardContent>
           </Card>
         ))}

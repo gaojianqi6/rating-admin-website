@@ -3,12 +3,12 @@ import api from "@/lib/api";
 export interface Statistics {
   totalItems: number;
   itemsByTemplate: {
-    varietyShow: number;
     movie: number;
+    tvSeries: number;
+    varietyShow: number;
+    book: number;
     music: number;
     podcast: number;
-    book: number;
-    tvSeries: number;
   };
   overallStatistics: {
     averageRating: number;
