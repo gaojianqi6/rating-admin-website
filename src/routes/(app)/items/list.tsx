@@ -32,6 +32,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { parseDateSafely } from "@/utils/utils"; // Updated import path
+import { PAGE_SIZE_OPTIONS } from "@/constants/ui";
 
 export const Route = createFileRoute('/(app)/items/list')({
   component: ItemsPage,
@@ -53,9 +54,7 @@ function ItemsPage() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
-
-  // Parse search params from URL
-  const initialFilters: ItemsQueryParams = {
+  const [tempFilters, setTempFilters] = useState<ItemsQueryParams>({
     pageNo: parseInt(search?.pageNo as string || "1"),
     pageSize: parseInt(search?.pageSize as string || "10"),
     title: (search?.title as string) || "",
@@ -64,9 +63,9 @@ function ItemsPage() {
     createdTimeEnd: (search?.createdTimeEnd as string) || undefined,
     sortField: (search?.sortField as string) || "createdAt",
     sortOrder: (search?.sortOrder as "asc" | "desc") || "desc",
-  };
+  });
 
-  const [filters, setFilters] = useState<ItemsQueryParams>(initialFilters);
+  const [filters, setFilters] = useState<ItemsQueryParams>(tempFilters);
 
   // Load templates for filter dropdown
   useEffect(() => {
@@ -127,11 +126,33 @@ function ItemsPage() {
   };
 
   const handleFilterChange = (key: keyof ItemsQueryParams, value: any) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-      pageNo: 1, // Reset to first page on filter change
-    }));
+    if (key === 'pageSize') {
+      // Page size changes trigger immediate search
+      const newFilters = {
+        ...filters,
+        [key]: value,
+        pageNo: 1, // Reset to first page when changing page size
+      };
+      setFilters(newFilters);
+      setTempFilters(newFilters);
+    } else {
+      // Other changes only update tempFilters
+      setTempFilters(prev => ({
+        ...prev,
+        [key]: value,
+        pageNo: key !== 'pageNo' ? 1 : value, // Reset page number except when changing page number itself
+      }));
+    }
+  };
+
+  const handleApplyFilters = () => {
+    setFilters(tempFilters);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleApplyFilters();
+    }
   };
 
   const handleSort = (field: string) => {
@@ -166,7 +187,7 @@ function ItemsPage() {
   };
 
   const resetFilters = () => {
-    setFilters({
+    const defaultFilters: ItemsQueryParams = {
       pageNo: 1,
       pageSize: 10,
       title: "",
@@ -174,8 +195,10 @@ function ItemsPage() {
       createdTimeStart: undefined,
       createdTimeEnd: undefined,
       sortField: "createdAt",
-      sortOrder: "desc",
-    });
+      sortOrder: "desc" as const,
+    };
+    setFilters(defaultFilters);
+    setTempFilters(defaultFilters);
   };
 
   const retryLoadItems = () => {
@@ -199,8 +222,9 @@ function ItemsPage() {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
               <Input
                 placeholder="Search by title"
-                value={filters.title || ""}
+                value={tempFilters.title || ""}
                 onChange={(e) => handleFilterChange("title", e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="w-full"
               />
             </div>
@@ -208,8 +232,8 @@ function ItemsPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Template</label>
               <Select
-                value={filters.templateId?.toString()}
-                onValueChange={(value) => handleFilterChange("templateId", value ? parseInt(value) : undefined)}
+                value={tempFilters.templateId?.toString() || "0"}
+                onValueChange={(value) => handleFilterChange("templateId", value === "0" ? undefined : parseInt(value))}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="All templates" />
@@ -228,10 +252,16 @@ function ItemsPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Created From</label>
               <DatePicker
-                date={filters.createdTimeStart ? parseDateSafely(filters.createdTimeStart) || undefined : undefined}
-                onSelect={(date) =>
-                  handleFilterChange("createdTimeStart", date ? date.toISOString().split('T')[0] : undefined)
-                }
+                date={tempFilters.createdTimeStart ? parseDateSafely(tempFilters.createdTimeStart) || undefined : undefined}
+                onSelect={(date) => {
+                  if (date) {
+                    // Adjust for timezone to keep the selected date
+                    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+                    handleFilterChange("createdTimeStart", localDate.toISOString().split('T')[0]);
+                  } else {
+                    handleFilterChange("createdTimeStart", undefined);
+                  }
+                }}
                 className="w-full"
               />
             </div>
@@ -239,10 +269,16 @@ function ItemsPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Created To</label>
               <DatePicker
-                date={filters.createdTimeEnd ? parseDateSafely(filters.createdTimeEnd) || undefined : undefined}
-                onSelect={(date) =>
-                  handleFilterChange("createdTimeEnd", date ? date.toISOString().split('T')[0] : undefined)
-                }
+                date={tempFilters.createdTimeEnd ? parseDateSafely(tempFilters.createdTimeEnd) || undefined : undefined}
+                onSelect={(date) => {
+                  if (date) {
+                    // Adjust for timezone to keep the selected date
+                    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+                    handleFilterChange("createdTimeEnd", localDate.toISOString().split('T')[0]);
+                  } else {
+                    handleFilterChange("createdTimeEnd", undefined);
+                  }
+                }}
                 className="w-full"
               />
             </div>
@@ -257,7 +293,7 @@ function ItemsPage() {
               Reset Filters
             </Button>
             <Button
-              onClick={() => setFilters((prev) => ({ ...prev, pageNo: 1 }))}
+              onClick={handleApplyFilters}
               className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
             >
               Apply Filters
@@ -429,55 +465,127 @@ function ItemsPage() {
                 </Table>
               </div>
 
-              <div className="mt-6 flex justify-between items-center">
-                <div className="whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                  Showing {items.length} of {totalItems} items
+              <div className="mt-6 flex justify-between items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                    Showing {items.length} of {totalItems} items
+                  </div>
+                  <Select
+                    value={filters.pageSize?.toString()}
+                    onValueChange={(value) => handleFilterChange("pageSize", parseInt(value))}
+                  >
+                    <SelectTrigger className="w-[140px]">
+                      <SelectValue placeholder="Items per page" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAGE_SIZE_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value.toString()}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Pagination className="justify-end">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        onClick={() => handlePageChange(Math.max(1, (filters.pageNo || 1) - 1))}
-                        className={`cursor-pointer ${(filters.pageNo || 1) <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      />
-                    </PaginationItem>
-                    {Array.from({ length: Math.min(5, Math.ceil(totalItems / (filters.pageSize || 10))) }, (_, i) => {
-                      const page = i + 1;
-                      return (
-                        <PaginationItem key={page}>
-                          <PaginationLink
-                            onClick={() => handlePageChange(page)}
-                            isActive={page === (filters.pageNo || 1)}
-                            className="cursor-pointer"
-                          >
-                            {page}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    })}
-                    {Math.ceil(totalItems / (filters.pageSize || 10)) > 5 && (
-                      <>
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink
-                            onClick={() => handlePageChange(Math.ceil(totalItems / (filters.pageSize || 10)))}
-                            className="cursor-pointer"
-                          >
-                            {Math.ceil(totalItems / (filters.pageSize || 10))}
-                          </PaginationLink>
-                        </PaginationItem>
-                      </>
-                    )}
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={() => handlePageChange(Math.min(Math.ceil(totalItems / (filters.pageSize || 10)), (filters.pageNo || 1) + 1))}
-                        className={`cursor-pointer ${(filters.pageNo || 1) >= Math.ceil(totalItems / (filters.pageSize || 10)) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 whitespace-nowrap">
+                    <Input
+                      type="number"
+                      min={1}
+                      max={Math.ceil(totalItems / (filters.pageSize || 10))}
+                      value={tempFilters.pageNo || 1}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (!isNaN(value)) {
+                          handleFilterChange("pageNo", value);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          const value = parseInt((e.target as HTMLInputElement).value);
+                          if (value > 0 && value <= Math.ceil(totalItems / (filters.pageSize || 10))) {
+                            handleApplyFilters();
+                          }
+                        }
+                      }}
+                      className="w-[60px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      of {Math.ceil(totalItems / (filters.pageSize || 10))}
+                    </span>
+                  </div>
+                  <Pagination className="justify-end">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => handlePageChange(Math.max(1, (filters.pageNo || 1) - 1))}
+                          className={`cursor-pointer ${(filters.pageNo || 1) <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        />
+                      </PaginationItem>
+                      {(() => {
+                        const currentPage = filters.pageNo || 1;
+                        const totalPages = Math.ceil(totalItems / (filters.pageSize || 10));
+                        const pages: number[] = [];
+                        
+                        // Always show first page
+                        pages.push(1);
+                        
+                        // Calculate range around current page
+                        let start = Math.max(2, currentPage - 1);
+                        let end = Math.min(totalPages - 1, currentPage + 1);
+                        
+                        // Adjust range if at edges
+                        if (currentPage <= 2) {
+                          end = Math.min(4, totalPages - 1);
+                        }
+                        if (currentPage >= totalPages - 1) {
+                          start = Math.max(2, totalPages - 3);
+                        }
+                        
+                        // Add ellipsis after first page if needed
+                        if (start > 2) {
+                          pages.push(-1); // -1 represents ellipsis
+                        }
+                        
+                        // Add pages in range
+                        for (let i = start; i <= end; i++) {
+                          pages.push(i);
+                        }
+                        
+                        // Add ellipsis before last page if needed
+                        if (end < totalPages - 1) {
+                          pages.push(-2); // -2 represents ellipsis
+                        }
+                        
+                        // Always show last page if there is more than one page
+                        if (totalPages > 1) {
+                          pages.push(totalPages);
+                        }
+                        
+                        return pages.map((page, index) => (
+                          <PaginationItem key={`${page}-${index}`}>
+                            {page < 0 ? (
+                              <PaginationEllipsis />
+                            ) : (
+                              <PaginationLink
+                                onClick={() => handlePageChange(page)}
+                                isActive={page === currentPage}
+                                className="cursor-pointer"
+                              >
+                                {page}
+                              </PaginationLink>
+                            )}
+                          </PaginationItem>
+                        ));
+                      })()}
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => handlePageChange(Math.min(Math.ceil(totalItems / (filters.pageSize || 10)), (filters.pageNo || 1) + 1))}
+                          className={`cursor-pointer ${(filters.pageNo || 1) >= Math.ceil(totalItems / (filters.pageSize || 10)) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
               </div>
             </>
           )}
