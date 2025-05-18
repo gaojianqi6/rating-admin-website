@@ -15,6 +15,7 @@ import { Route as appRouteImport } from './routes/(app)/route'
 import { Route as appIndexImport } from './routes/(app)/index'
 import { Route as authLoginImport } from './routes/(auth)/login'
 import { Route as appAboutImport } from './routes/(app)/about'
+import { Route as appUserProfileImport } from './routes/(app)/user/profile'
 import { Route as appUserListImport } from './routes/(app)/user/list'
 import { Route as appTemplateListImport } from './routes/(app)/template/list'
 import { Route as appTemplateCreateImport } from './routes/(app)/template/create'
@@ -46,6 +47,12 @@ const authLoginRoute = authLoginImport.update({
 const appAboutRoute = appAboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appUserProfileRoute = appUserProfileImport.update({
+  id: '/user/profile',
+  path: '/user/profile',
   getParentRoute: () => appRouteRoute,
 } as any)
 
@@ -171,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appUserListImport
       parentRoute: typeof appRouteImport
     }
+    '/(app)/user/profile': {
+      id: '/(app)/user/profile'
+      path: '/user/profile'
+      fullPath: '/user/profile'
+      preLoaderRoute: typeof appUserProfileImport
+      parentRoute: typeof appRouteImport
+    }
     '/(app)/template/$id/edit': {
       id: '/(app)/template/$id/edit'
       path: '/template/$id/edit'
@@ -199,6 +213,7 @@ interface appRouteRouteChildren {
   appTemplateCreateRoute: typeof appTemplateCreateRoute
   appTemplateListRoute: typeof appTemplateListRoute
   appUserListRoute: typeof appUserListRoute
+  appUserProfileRoute: typeof appUserProfileRoute
   appTemplateIdEditRoute: typeof appTemplateIdEditRoute
   appTemplateIdViewRoute: typeof appTemplateIdViewRoute
 }
@@ -212,6 +227,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appTemplateCreateRoute: appTemplateCreateRoute,
   appTemplateListRoute: appTemplateListRoute,
   appUserListRoute: appUserListRoute,
+  appUserProfileRoute: appUserProfileRoute,
   appTemplateIdEditRoute: appTemplateIdEditRoute,
   appTemplateIdViewRoute: appTemplateIdViewRoute,
 }
@@ -230,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/template/create': typeof appTemplateCreateRoute
   '/template/list': typeof appTemplateListRoute
   '/user/list': typeof appUserListRoute
+  '/user/profile': typeof appUserProfileRoute
   '/template/$id/edit': typeof appTemplateIdEditRoute
   '/template/$id/view': typeof appTemplateIdViewRoute
 }
@@ -244,6 +261,7 @@ export interface FileRoutesByTo {
   '/template/create': typeof appTemplateCreateRoute
   '/template/list': typeof appTemplateListRoute
   '/user/list': typeof appUserListRoute
+  '/user/profile': typeof appUserProfileRoute
   '/template/$id/edit': typeof appTemplateIdEditRoute
   '/template/$id/view': typeof appTemplateIdViewRoute
 }
@@ -260,6 +278,7 @@ export interface FileRoutesById {
   '/(app)/template/create': typeof appTemplateCreateRoute
   '/(app)/template/list': typeof appTemplateListRoute
   '/(app)/user/list': typeof appUserListRoute
+  '/(app)/user/profile': typeof appUserProfileRoute
   '/(app)/template/$id/edit': typeof appTemplateIdEditRoute
   '/(app)/template/$id/view': typeof appTemplateIdViewRoute
 }
@@ -276,6 +295,7 @@ export interface FileRouteTypes {
     | '/template/create'
     | '/template/list'
     | '/user/list'
+    | '/user/profile'
     | '/template/$id/edit'
     | '/template/$id/view'
   fileRoutesByTo: FileRoutesByTo
@@ -289,6 +309,7 @@ export interface FileRouteTypes {
     | '/template/create'
     | '/template/list'
     | '/user/list'
+    | '/user/profile'
     | '/template/$id/edit'
     | '/template/$id/view'
   id:
@@ -303,6 +324,7 @@ export interface FileRouteTypes {
     | '/(app)/template/create'
     | '/(app)/template/list'
     | '/(app)/user/list'
+    | '/(app)/user/profile'
     | '/(app)/template/$id/edit'
     | '/(app)/template/$id/view'
   fileRoutesById: FileRoutesById
@@ -343,6 +365,7 @@ export const routeTree = rootRoute
         "/(app)/template/create",
         "/(app)/template/list",
         "/(app)/user/list",
+        "/(app)/user/profile",
         "/(app)/template/$id/edit",
         "/(app)/template/$id/view"
       ]
@@ -380,6 +403,10 @@ export const routeTree = rootRoute
     },
     "/(app)/user/list": {
       "filePath": "(app)/user/list.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/user/profile": {
+      "filePath": "(app)/user/profile.tsx",
       "parent": "/(app)"
     },
     "/(app)/template/$id/edit": {

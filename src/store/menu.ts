@@ -113,6 +113,17 @@ export const TOTAL_NAVS = APP_DATA.navMain.concat([{
       url: "/template/$id/edit",
     },
   ],
+}, {
+  title: "User Management",
+  url: "#",
+  icon: LayoutTemplate,
+  isActive: true,
+  items: [
+    {
+      title: "Profile",
+      url: "/user/profile",
+    },
+  ],
 },]);
 
 // Function to check if a URL matches a pattern
@@ -121,7 +132,7 @@ function matchUrlPattern(navItem, currentUrl) {
   if (navItem.url === currentUrl) {
     return true;
   }
-  
+
   // Pattern match (for routes with parameters)
   if (navItem.pattern && navItem.pattern.test(currentUrl)) {
     return true;
@@ -134,7 +145,7 @@ function matchUrlPattern(navItem, currentUrl) {
     const dynamicPattern = new RegExp(`^${regexPattern}$`);
     return dynamicPattern.test(currentUrl);
   }
-  
+
   return false;
 }
 

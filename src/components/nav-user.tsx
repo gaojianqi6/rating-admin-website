@@ -1,6 +1,7 @@
 "use client";
 
 import { BadgeCheck, ChevronsUpDown, LogOut } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -20,15 +21,9 @@ import {
 } from "@/components/ui/sidebar";
 import { toLogin } from "@/utils/auth";
 import { User } from "@/typings/user";
-import { toast } from "sonner";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
-
-  const checkMyAccount = () => {
-    const { username, createdTime, roleName } = user;
-    toast(`Hello, ${roleName} ${username}. You created at ${createdTime}`);
-  }
 
   return (
     <SidebarMenu>
@@ -70,14 +65,16 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={checkMyAccount}>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild>
+                <Link to="/user/profile">
+                  <BadgeCheck className="mr-2" />
+                  Account
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={toLogin}>
-              <LogOut />
+              <LogOut className="mr-2" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
