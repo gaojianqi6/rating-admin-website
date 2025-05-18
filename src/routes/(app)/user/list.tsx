@@ -57,19 +57,36 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { useState } from 'react'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Form,
+} from "@/components/ui/form"
+import { useState, useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createUser, deleteUser, getRoles, getUsers, updateUser } from '@/api/user'
 import { User } from '@/typings/user'
 import { datetime } from '@/utils/date'
 import { toast } from 'sonner'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
-interface UserFormData {
-  username: string;
-  email: string;
-  password: string;
-  roleId: string;
-}
+const userFormSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+  roleId: z.string().min(1, "Role is required"),
+})
+
+const updateUserFormSchema = userFormSchema.extend({
+  password: z.string().optional(),
+})
+
+type UserFormValues = z.infer<typeof userFormSchema>
 
 interface UserDialogProps {
   open: boolean;
@@ -80,11 +97,14 @@ interface UserDialogProps {
 
 function UserDialog({ open, onOpenChange, user, mode }: UserDialogProps) {
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState<UserFormData>({
-    username: user?.username ?? '',
-    email: user?.email ?? '',
-    password: '',
-    roleId: user?.roleId?.toString() ?? '',
+  const form = useForm<UserFormValues>({
+    resolver: zodResolver(mode === 'create' ? userFormSchema : updateUserFormSchema),
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+      roleId: '',
+    },
   });
 
   const { data: roles = [] } = useQuery({
@@ -92,21 +112,41 @@ function UserDialog({ open, onOpenChange, user, mode }: UserDialogProps) {
     queryFn: getRoles,
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Reset form when dialog opens/closes or mode changes
+  useEffect(() => {
+    if (open) {
+      if (mode === 'update' && user) {
+        form.reset({
+          username: user.username,
+          email: user.email,
+          password: '',
+          roleId: user.roleId.toString(),
+        });
+      } else {
+        form.reset({
+          username: '',
+          email: '',
+          password: '',
+          roleId: '',
+        });
+      }
+    }
+  }, [open, mode, user, form]);
+
+  const onSubmit = async (values: UserFormValues) => {
     try {
       if (mode === 'create') {
         await createUser({
-          ...formData,
-          roleId: parseInt(formData.roleId),
+          ...values,
+          roleId: parseInt(values.roleId),
         });
         toast.success('User created successfully');
       } else {
         await updateUser(user!.id, {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password || undefined,
-          roleId: parseInt(formData.roleId),
+          username: values.username,
+          email: values.email,
+          password: values.password || undefined,
+          roleId: parseInt(values.roleId),
         });
         toast.success('User updated successfully');
       }
@@ -128,73 +168,84 @@ function UserDialog({ open, onOpenChange, user, mode }: UserDialogProps) {
               : 'Update the user details below.'}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input
-                id="username"
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="col-span-3"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="col-span-3"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="text-right">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="col-span-3"
-                required={mode === 'create'}
-                placeholder={mode === 'update' ? 'Leave empty to keep current password' : ''}
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">
-                Role
-              </Label>
-              <Select
-                value={formData.roleId}
-                onValueChange={(value) => setFormData({ ...formData, roleId: value })}
-                required
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roles.map((role) => (
-                    <SelectItem key={role.id} value={role.id.toString()}>
-                      {role.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">{mode === 'create' ? 'Create' : 'Update'}</Button>
-          </DialogFooter>
-        </form>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" autoComplete="off">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input {...field} autoComplete="off" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="email" autoComplete="off" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      type="password" 
+                      autoComplete="new-password"
+                      placeholder={mode === 'update' ? 'Leave empty to keep current password' : ''}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="roleId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {roles.map((role) => (
+                        <SelectItem key={role.id} value={role.id.toString()}>
+                          {role.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <Button type="submit">{mode === 'create' ? 'Create' : 'Update'}</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
