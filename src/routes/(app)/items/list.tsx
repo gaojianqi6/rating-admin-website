@@ -12,7 +12,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Badge } from "@/components/ui/badge";
-import { Pagination } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -421,17 +429,55 @@ function ItemsPage() {
                 </Table>
               </div>
 
-              <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="mt-6 flex justify-between items-center">
+                <div className="whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                   Showing {items.length} of {totalItems} items
                 </div>
-                <Pagination
-                  currentPage={filters.pageNo || 1}
-                  pageSize={filters.pageSize || 10}
-                  totalItems={totalItems}
-                  onPageChange={handlePageChange}
-                  className="flex items-center space-x-2"
-                />
+                <Pagination className="justify-end">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => handlePageChange(Math.max(1, (filters.pageNo || 1) - 1))}
+                        className={`cursor-pointer ${(filters.pageNo || 1) <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: Math.min(5, Math.ceil(totalItems / (filters.pageSize || 10))) }, (_, i) => {
+                      const page = i + 1;
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(page)}
+                            isActive={page === (filters.pageNo || 1)}
+                            className="cursor-pointer"
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+                    {Math.ceil(totalItems / (filters.pageSize || 10)) > 5 && (
+                      <>
+                        <PaginationItem>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink
+                            onClick={() => handlePageChange(Math.ceil(totalItems / (filters.pageSize || 10)))}
+                            className="cursor-pointer"
+                          >
+                            {Math.ceil(totalItems / (filters.pageSize || 10))}
+                          </PaginationLink>
+                        </PaginationItem>
+                      </>
+                    )}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => handlePageChange(Math.min(Math.ceil(totalItems / (filters.pageSize || 10)), (filters.pageNo || 1) + 1))}
+                        className={`cursor-pointer ${(filters.pageNo || 1) >= Math.ceil(totalItems / (filters.pageSize || 10)) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               </div>
             </>
           )}
