@@ -1,7 +1,7 @@
 {
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "http://52.207.234.21/admin-api/api/(.*)",
       "headers": [
         {
           "key": "Content-Security-Policy",
