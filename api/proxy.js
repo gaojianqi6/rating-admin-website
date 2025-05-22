@@ -1,11 +1,11 @@
 import ky from 'ky';
 
 export default async (req, res) => {
-  const apiBaseUrl = process.env.API_URL || 'http://52.207.234.21:8000/admin-api/api'; // Adjust port if needed
+  const apiBaseUrl = 'http://52.207.234.21/admin-api/api';
   const path = req.url.replace(/^\/api/, '');
   const url = `${apiBaseUrl}${path}`;
 
-  console.log(`Proxying request to: ${url}`); // Debug log
+  console.log(`Proxying request to: ${url}`);
 
   try {
     const apiResponse = await ky(url, {
@@ -16,15 +16,15 @@ export default async (req, res) => {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
       },
       body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined,
-      timeout: 10000, // 10 seconds timeout
-      throwHttpErrors: false, // Prevent ky from throwing on non-2xx/3xx responses
+      timeout: 30000, // Increase to 30 seconds
+      retry: 2, // Retry up to 2 times
+      throwHttpErrors: false,
     });
 
-    console.log(`API response status: ${apiResponse.status}`); // Debug log
+    console.log(`API response status: ${apiResponse.status}`);
 
-    // Handle redirects manually
     if (apiResponse.status >= 300 && apiResponse.status < 400) {
-      const location = apiResponse.headers.get('location'); // Note: ky uses lowercase 'location'
+      const location = apiResponse.headers.get('location');
       if (location) {
         console.log(`Redirect detected: ${location}`);
         const correctedLocation = location.startsWith('http://52.207.234.21/api/')
@@ -38,7 +38,8 @@ export default async (req, res) => {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
           },
           body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined,
-          timeout: 10000,
+          timeout: 30000,
+          retry: 2,
           throwHttpErrors: false,
         });
 
@@ -52,7 +53,6 @@ export default async (req, res) => {
       }
     }
 
-    // Forward the response
     apiResponse.headers.forEach((value, name) => {
       res.setHeader(name, value);
     });
