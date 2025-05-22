@@ -1,14 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "missing": [
-        {
-          "type": "header",
-          "key": "X-Vercel-Proxy"
-        }
-      ],
-      "destination": "http://52.207.234.21/admin-api/api/:path*"
+      "source": "/api/:path(.*)",
+      "destination": "http://52.207.234.21/admin-api/api/:path"
     },
     {
       "source": "/(.*)",
