@@ -9,12 +9,6 @@
           "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         }
       ],
-      "missing": [
-        {
-          "type": "header",
-          "key": "X-Vercel-Proxy"
-        }
-      ],
       "destination": "http://52.207.234.21/admin-api/api/:path*"
     },
     {
