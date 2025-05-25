@@ -114,6 +114,17 @@ export const TOTAL_NAVS = APP_DATA.navMain.concat([{
     },
   ],
 }, {
+  title: "Items Management",
+  url: "#",
+  icon: ListMinus,
+  isActive: true,
+  items: [
+    {
+      title: "Item Details",
+      url: "/items/$id"
+    },
+  ],
+}, {
   title: "User Management",
   url: "#",
   icon: LayoutTemplate,
