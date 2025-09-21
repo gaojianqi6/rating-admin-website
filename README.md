@@ -35,6 +35,8 @@ RateEverything is your all-in-one platform for rating and reviewing various type
 
 ## 🚀 Getting Started
 
+Rating admin api: https://rating-admin-api.onrender.com/api/v1/data-sources
+
 ### Prerequisites
 
 - Node.js (Latest LTS version recommended)
